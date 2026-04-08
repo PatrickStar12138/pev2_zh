@@ -4,6 +4,7 @@ import VLink from "../components/VLink.vue"
 import { useTheme } from "../composables/useTheme"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons"
+import { t } from "@/i18n"
 
 interface Props {
   title?: string
@@ -24,15 +25,15 @@ const { theme, toggleTheme } = useTheme()
         <div v-if="props?.title" class="text-center ms-auto">
           {{ props?.title }}
         </div>
-        <VLink class="btn btn-secondary ms-auto" to="/">New Plan</VLink>
+        <VLink class="btn btn-secondary ms-auto" to="/">{{ t("app.newPlan") }}</VLink>
         <button
           class="btn btn-link"
           @click="toggleTheme"
-          :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+          :title="theme === 'dark' ? t('app.switchToLightMode') : t('app.switchToDarkMode')"
         >
           <FontAwesomeIcon :icon="theme === 'dark' ? faMoon : faSun" />
         </button>
-        <VLink class="btn btn-link" to="/about">About</VLink>
+        <VLink class="btn btn-link" to="/about">{{ t("app.about") }}</VLink>
       </div>
     </nav>
     <slot></slot>

@@ -9,7 +9,6 @@ import { useDropZone } from "@vueuse/core"
 
 import { time_ago } from "../utils"
 import MainLayout from "../layouts/MainLayout.vue"
-import Plan from "@/components/Plan.vue"
 import VersionCheck from "../components/VersionCheck.vue"
 import {
   faEdit,
@@ -21,23 +20,26 @@ import {
 import samples from "../samples.ts"
 
 import idb from "../idb"
+import { t } from "@/i18n"
+
+type StoredPlan = [string, string, string, string?] & { id: number }
 
 const setPlanData = inject("setPlanData")
 
 const planInput = ref<string>("")
 const queryInput = ref<string>("")
 const planName = ref<string>("")
-const savedPlans = ref<Plan[]>([])
+const savedPlans = ref<StoredPlan[]>([])
 const pageSize = 11
 const maxVisiblePages = 5
 const currentPage = ref<number>(1)
 const totalPages = computed(() => {
   return Math.ceil(savedPlans.value.length / pageSize)
 })
-const hovered = ref(null)
+const hovered = ref<number | null>(null)
 const selectionMode = ref(false)
-const selection = ref<Plan[]>([])
-const messages = ref<string[]>([])
+const selection = ref<number[]>([])
+const messages = ref<{ id: number; text: string }[]>([])
 
 const paginatedPlans = computed(() => {
   const start = (currentPage.value - 1) * pageSize
@@ -87,14 +89,15 @@ const { isOverDropZone: isOverSavedPlansDropZone } = useDropZone(
 )
 
 function submitPlan() {
-  const newPlan: Plan = ["", "", ""]
+  const newPlan: StoredPlan = ["", "", ""] as StoredPlan
   newPlan[0] =
     planName.value ||
-    "New Plan - " +
-      new Date().toLocaleString("en-US", {
+    t("demo.defaultPlanName", {
+      date: new Date().toLocaleString("zh-CN", {
         dateStyle: "medium",
         timeStyle: "medium",
-      })
+      }),
+    })
   newPlan[1] = planInput.value
   newPlan[2] = queryInput.value
   newPlan[3] = new Date().toISOString()
@@ -125,7 +128,7 @@ async function loadPlans() {
     .reverse()
 }
 
-function loadPlan(plan?: Plan) {
+function loadPlan(plan?: StoredPlan) {
   if (!plan) {
     return
   }
@@ -135,7 +138,7 @@ function loadPlan(plan?: Plan) {
   queryInput.value = plan[2]
 }
 
-function openOrSelectPlan(plan: Plan) {
+function openOrSelectPlan(plan: StoredPlan) {
   if (!selectionMode.value) {
     openPlan(plan)
   } else {
@@ -143,15 +146,15 @@ function openOrSelectPlan(plan: Plan) {
   }
 }
 
-function openPlan(plan: Plan) {
+function openPlan(plan: StoredPlan) {
   setPlanData(plan[0], plan[1], plan[2])
 }
 
-function isSelected(id: integer) {
+function isSelected(id: number) {
   return selection.value.includes(id)
 }
 
-function togglePlanSelection(plan) {
+function togglePlanSelection(plan: StoredPlan) {
   const index = selection.value.indexOf(plan.id)
   if (index === -1) {
     selection.value.push(plan.id)
@@ -160,7 +163,7 @@ function togglePlanSelection(plan) {
   }
 }
 
-function editPlan(plan: Plan) {
+function editPlan(plan: StoredPlan) {
   loadPlan(plan)
 }
 
@@ -171,20 +174,20 @@ function plansFromSelection() {
 }
 
 function deletePlans() {
-  if (confirm("Are you sure you want to delete plans?")) {
+  if (confirm(t("demo.confirmDeletePlans"))) {
     const plans = plansFromSelection()
     plans.forEach(async (plan) => {
       await idb.deletePlan(plan)
     })
     loadPlans()
     selectionMode.value = false
-    addMessage(`Deleted ${plans.length} plans`)
+    addMessage(t("demo.deletedPlans", { count: plans.length }))
   }
   // reset page
   currentPage.value = 1
 }
 
-async function deletePlan(plan: Plan) {
+async function deletePlan(plan: StoredPlan) {
   await idb.deletePlan(plan)
   loadPlans()
 }
@@ -212,7 +215,7 @@ function prevPage() {
     currentPage.value--
   }
 }
-function goToPage(page) {
+function goToPage(page: number) {
   currentPage.value = page
 }
 
@@ -242,15 +245,15 @@ function onImport(files: File[]) {
     try {
       const plans = JSON.parse(reader.result as string)
       const counts = await idb.importPlans(plans)
-      let message = `Imported ${counts[0]} plans`
+      let message = t("demo.importedPlans", { count: counts[0] })
       if (counts[1]) {
-        message += ` <i>(${counts[1]} duplicates found)</i>`
+        message += ` <i>(${t("demo.duplicatesFound", { count: counts[1] })})</i>`
       }
       addMessage(message)
       loadPlans()
     } catch (error: unknown) {
       console.error("Invalid file format", error)
-      alert("Invalid file format")
+      alert(t("demo.invalidFileFormat"))
     }
   }
   reader.readAsText(file)
@@ -271,7 +274,7 @@ async function exportPlans(plans) {
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
-  addMessage(`Exported ${plans.length} plans`)
+  addMessage(t("demo.exportedPlans", { count: plans.length }))
 }
 
 function addMessage(text) {
@@ -289,25 +292,21 @@ function addMessage(text) {
     <div class="container">
       <VersionCheck />
       <div class="alert alert-warning">
-        This is the demo application for
-        <a href="https://github.com/dalibo/pev2">PEV2</a>. It is serverless and
-        doesn't send your plans over the internet.
+        {{ t("demo.serverlessNotice") }}
         <br />
-        Please consider using
-        <a href="https://explain.dalibo.com">explain.dalibo.com</a> instead if
-        you want to save or share your plans.
+        {{ t("demo.shareSuggestion") }}
       </div>
       <div class="row">
         <div class="col-sm-7">
           <div class="row mb-3">
             <div class="col d-flex">
               <div class="text-body-secondary">
-                For best results, use
+                {{ t("demo.bestResults") }}
                 <code>
                   EXPLAIN (ANALYZE, COSTS, VERBOSE, BUFFERS, FORMAT JSON)
                 </code>
                 <br />
-                <em>psql</em> users can export the plan to a file using
+                {{ t("demo.psqlTip") }}
                 <code class="text-nowrap"
                   >psql -XqAt -f explain.sql > analyze.json</code
                 >
@@ -317,9 +316,9 @@ function addMessage(text) {
           <form v-on:submit.prevent="submitPlan">
             <div class="mb-3">
               <div class="d-flex align-items-center mb-2">
-                <label for="planInput" class="form-label">
-                  Plan
-                  <span class="small text-body-tertiary">(text or JSON)</span>
+                  <label for="planInput" class="form-label">
+                  {{ t("demo.plan") }}
+                  <span class="small text-body-tertiary">({{ t("demo.textOrJson") }})</span>
                 </label>
                 <div class="dropdown ms-auto">
                   <button
@@ -330,7 +329,7 @@ function addMessage(text) {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    Sample Plans
+                    {{ t("demo.samplePlans") }}
                   </button>
                   <div
                     class="dropdown-menu"
@@ -357,13 +356,13 @@ function addMessage(text) {
                 id="planInput"
                 rows="8"
                 v-model="planInput"
-                placeholder="Paste execution plan\nOr drop a file"
+                :placeholder="t('demo.planPlaceholder')"
               >
               </textarea>
             </div>
             <div class="mb-3">
               <label for="queryInput" class="form-label">
-                Query <span class="small text-body-tertiary">(optional)</span>
+                {{ t("demo.query") }} <span class="small text-body-tertiary">({{ t("demo.optional") }})</span>
               </label>
               <textarea
                 ref="queryDropZoneRef"
@@ -374,24 +373,24 @@ function addMessage(text) {
                 id="queryInput"
                 rows="8"
                 v-model="queryInput"
-                placeholder="Paste corresponding SQL query\nOr drop a file"
+                :placeholder="t('demo.queryPlaceholder')"
               >
               </textarea>
             </div>
             <div class="mb-3">
               <label for="planName" class="form-label">
-                Plan Name
-                <span class="small text-body-tertiary">(optional)</span>
+                {{ t("demo.planName") }}
+                <span class="small text-body-tertiary">({{ t("demo.optional") }})</span>
               </label>
               <input
                 type="text"
                 class="form-control"
                 id="planName"
                 v-model="planName"
-                placeholder="Name for the plan"
+                :placeholder="t('demo.planNamePlaceholder')"
               />
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">{{ t("demo.submit") }}</button>
           </form>
         </div>
         <div
@@ -401,7 +400,7 @@ function addMessage(text) {
         >
           <div class="d-flex flex-row align-items-center mb-2">
             <div>
-              Saved Plans
+              {{ t("demo.savedPlans") }}
               <div class="badge text-bg-light">
                 {{ savedPlans?.length }}
               </div>
@@ -410,9 +409,7 @@ function addMessage(text) {
                   :icon="faInfoCircle"
                   class="text-body-tertiary"
                 ></FontAwesomeIcon>
-                <template #content
-                  >Plans are saved locally in your browser storage.</template
-                >
+                <template #content>{{ t("demo.savedPlansTip") }}</template>
               </Tippy>
             </div>
             <div class="ms-auto">
@@ -422,9 +419,9 @@ function addMessage(text) {
                     :icon="faDownload"
                     class="me-2"
                   ></FontAwesomeIcon>
-                  Import
+                  {{ t("demo.import") }}
                 </button>
-                <template #content>Import plans from a JSON file</template>
+                <template #content>{{ t("demo.importTip") }}</template>
               </Tippy>
               <input
                 type="file"
@@ -438,7 +435,7 @@ function addMessage(text) {
                 :class="{ active: selectionMode }"
                 @click="selectionMode = !selectionMode"
               >
-                Select
+                {{ t("demo.select") }}
               </button>
             </div>
           </div>
@@ -449,10 +446,10 @@ function addMessage(text) {
                   class="page-link"
                   href="#"
                   @click="prevPage"
-                  aria-label="Previous"
+                  :aria-label="t('demo.previous')"
                 >
                   <span aria-hidden="true">&laquo;</span>
-                  <span class="sr-only">Previous</span>
+                  <span class="sr-only">{{ t("demo.previous") }}</span>
                 </a>
               </li>
               <li
@@ -495,10 +492,10 @@ function addMessage(text) {
                   class="page-link"
                   href="#"
                   @click="nextPage"
-                  aria-labal="Next"
+                  :aria-label="t('demo.next')"
                 >
                   <span aria-hidden="true">&raquo;</span>
-                  <span class="sr-only">Next</span>
+                  <span class="sr-only">{{ t("demo.next") }}</span>
                 </a>
               </li>
             </ul>
@@ -507,7 +504,7 @@ function addMessage(text) {
             <div
               class="alert alert-success py-1"
               v-for="message in messages"
-              :key="message"
+              :key="message.id"
             >
               <span v-html="message.text"></span>
             </div>
@@ -542,7 +539,7 @@ function addMessage(text) {
                       'text-body-tertiary': !isSelected(plan.id),
                     }"
                   >
-                    created
+                    {{ t("demo.created") }}
                     <span :title="plan[3]?.toString()">
                       {{ time_ago(plan[3]) }}
                     </span>
@@ -554,21 +551,21 @@ function addMessage(text) {
                 >
                   <button
                     class="btn btn-sm btn-outline-secondary py-0 me-1"
-                    v-tippy="'Export plan'"
+                    v-tippy="t('demo.exportPlan')"
                     v-on:click.stop="exportPlans([plan])"
                   >
                     <FontAwesomeIcon :icon="faUpload"></FontAwesomeIcon>
                   </button>
                   <button
                     class="btn btn-sm btn-outline-secondary py-0 me-1"
-                    v-tippy="'Delete plan'"
+                    v-tippy="t('demo.deletePlan')"
                     v-on:click.stop="deletePlan(plan)"
                   >
                     <FontAwesomeIcon :icon="faTrash"></FontAwesomeIcon>
                   </button>
                   <button
                     class="btn btn-sm btn-outline-secondary py-0"
-                    v-tippy="'Edit plan details'"
+                    v-tippy="t('demo.editPlanDetails')"
                     v-on:click.stop="editPlan(plan)"
                   >
                     <FontAwesomeIcon :icon="faEdit"></FontAwesomeIcon>
@@ -580,13 +577,23 @@ function addMessage(text) {
           <div v-if="selectionMode" class="mt-2 d-flex">
             <button class="btn btn-sm btn-primary" @click="exportPlans()">
               <FontAwesomeIcon :icon="faUpload" class="me-2"></FontAwesomeIcon>
-              Export<template v-if="selection.length < 1"> all</template
-              ><template v-else> ({{ selection.length }})</template>
+              {{
+                selection.length < 1
+                  ? t("demo.exportAllPlans")
+                  : t("demo.exportSelectedPlans")
+              }}<template v-if="selection.length >= 1">
+                ({{ selection.length }})
+              </template>
             </button>
             <button class="btn btn-sm ms-auto btn-danger" @click="deletePlans">
               <FontAwesomeIcon :icon="faTrash" class="me-2"></FontAwesomeIcon>
-              Delete<template v-if="selection.length < 1"> all</template
-              ><template v-else> ({{ selection.length }})</template>
+              {{
+                selection.length < 1
+                  ? t("demo.deleteAllPlans")
+                  : t("demo.deleteSelectedPlans")
+              }}<template v-if="selection.length >= 1">
+                ({{ selection.length }})
+              </template>
             </button>
           </div>
           <p
@@ -594,7 +601,7 @@ function addMessage(text) {
             v-if="!savedPlans?.length"
             v-cloak
           >
-            <em> You haven't saved any plan yet.</em>
+            <em>{{ t("demo.noSavedPlans") }}</em>
           </p>
           <div
             class="position-absolute top-50 start-50 alert alert-primary translate-middle mb-0 z-3 opacity-100 text-center"
@@ -606,7 +613,7 @@ function addMessage(text) {
               size="2x"
             ></FontAwesomeIcon>
             <br />
-            Drop your JSON file here
+            {{ t("demo.dropJsonHere") }}
           </div>
         </div>
       </div>

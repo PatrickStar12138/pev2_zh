@@ -17,6 +17,7 @@ import DiagramRow from "@/components/DiagramRow.vue"
 import LevelDivider from "@/components/LevelDivider.vue"
 import { Tippy } from "vue-tippy"
 import { store } from "@/store"
+import { t } from "@/i18n"
 
 const helpService = new HelpService()
 const getHelpMessage = helpService.getHelpMessage
@@ -86,35 +87,35 @@ provide("scrollTo", scrollTo)
             :class="{ active: viewOptions.metric === Metric.time }"
             v-on:click="viewOptions.metric = Metric.time"
           >
-            time
+            {{ t("app.time") }}
           </button>
           <button
             class="btn btn-outline-secondary"
             :class="{ active: viewOptions.metric === Metric.rows }"
             v-on:click="viewOptions.metric = Metric.rows"
           >
-            rows
+            {{ t("app.rows") }}
           </button>
           <button
             class="btn btn-outline-secondary"
             :class="{ active: viewOptions.metric === Metric.estimate_factor }"
             v-on:click="viewOptions.metric = Metric.estimate_factor"
           >
-            estimation
+            估算
           </button>
           <button
             class="btn btn-outline-secondary"
             :class="{ active: viewOptions.metric === Metric.cost }"
             v-on:click="viewOptions.metric = Metric.cost"
           >
-            cost
+            {{ t("app.cost") }}
           </button>
           <button
             class="btn btn-outline-secondary"
             :class="{ active: viewOptions.metric === Metric.buffers }"
             v-on:click="viewOptions.metric = Metric.buffers"
           >
-            buffers
+            {{ t("app.buffers") }}
           </button>
           <Tippy
             :content="
@@ -146,7 +147,7 @@ provide("scrollTo", scrollTo)
             v-on:click="viewOptions.buffersMetric = BufferLocation.shared"
             :disabled="!store.stats.maxBlocks?.[BufferLocation.shared]"
           >
-            shared
+            {{ t("app.shared") }}
           </button>
           <button
             class="btn btn-outline-secondary"
@@ -156,7 +157,7 @@ provide("scrollTo", scrollTo)
             v-on:click="viewOptions.buffersMetric = BufferLocation.temp"
             :disabled="!store.stats.maxBlocks?.[BufferLocation.temp]"
           >
-            temp
+            {{ t("app.temp") }}
           </button>
           <button
             class="btn btn-outline-secondary"
@@ -166,7 +167,7 @@ provide("scrollTo", scrollTo)
             v-on:click="viewOptions.buffersMetric = BufferLocation.local"
             :disabled="!store.stats.maxBlocks?.[BufferLocation.local]"
           >
-            local
+            {{ t("app.local") }}
           </button>
         </div>
       </div>
@@ -180,33 +181,33 @@ provide("scrollTo", scrollTo)
             v-if="viewOptions.buffersMetric != BufferLocation.temp"
           >
             <span class="bg-hit rounded"></span>
-            Hit
+            {{ t("app.hit") }}
           </li>
           <li class="list-inline-item">
             <span class="bg-read"></span>
-            Read
+            {{ t("app.read") }}
           </li>
           <li
             class="list-inline-item"
             v-if="viewOptions.buffersMetric != BufferLocation.temp"
           >
             <span class="bg-dirtied"></span>
-            Dirtied
+            {{ t("app.dirtied") }}
           </li>
           <li class="list-inline-item">
             <span class="bg-written"></span>
-            Written
+            {{ t("app.written") }}
           </li>
         </ul>
         <template v-if="viewOptions.metric == Metric.io">
           <ul class="list-unstyled list-inline mb-0 d-inline-block">
             <li class="list-inline-item">
               <span class="bg-read"></span>
-              Read
+              {{ t("app.read") }}
             </li>
             <li class="list-inline-item">
               <span class="bg-written"></span>
-              Write
+              {{ t("app.write") }}
             </li>
           </ul>
         </template>
@@ -216,7 +217,7 @@ provide("scrollTo", scrollTo)
       <table class="m-1" v-if="dataAvailable">
         <tbody v-for="(flat, index) in store.flat" :key="index">
           <tr v-if="index === 0 && store.flat.length > 1">
-            <th colspan="3" class="subplan">Main Query Plan</th>
+            <th colspan="3" class="subplan">{{ t("app.mainQueryPlan") }}</th>
           </tr>
           <template v-for="row in flat" :key="row">
             <tr v-if="row.node[NodeProp.SUBPLAN_NAME]">
@@ -240,7 +241,7 @@ provide("scrollTo", scrollTo)
         </tbody>
       </table>
       <div class="p-2 text-center text-body-tertiary" v-else>
-        <em> No data available </em>
+        <em>{{ t("app.noDataAvailable") }}</em>
       </div>
     </div>
   </div>

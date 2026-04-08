@@ -3,6 +3,7 @@ import { computed, reactive } from "vue"
 import type { Node } from "@/interfaces"
 import { NodeProp, Scope } from "@/enums"
 import IoTimingsRow from "@/components/IoTimingsRow.vue"
+import { t } from "@/i18n"
 
 interface Props {
   node: Node
@@ -61,9 +62,9 @@ const node = reactive<Node>(props.node)
   >
     <thead>
       <tr>
-        <th class="text-nowrap">I/O Timings</th>
-        <td class="text-end" width="50%">Read</td>
-        <td class="text-end" width="50%">Write</td>
+        <th class="text-nowrap">{{ t("app.ioTimings") }}</th>
+        <td class="text-end" width="50%">{{ t("app.read") }}</td>
+        <td class="text-end" width="50%">{{ t("app.write") }}</td>
       </tr>
     </thead>
     <tbody>

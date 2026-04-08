@@ -16,6 +16,7 @@ import IoTooltip from "@/components/tooltip/IoTooltip.vue"
 import useNode from "@/node"
 import { store } from "@/store"
 import type { FlattenedPlanNode } from "@/store"
+import { t } from "@/i18n"
 
 import { Tippy } from "vue-tippy"
 
@@ -83,7 +84,7 @@ const isHighlighted = computed(
     <template #content>
       <template v-if="node[NodeProp.CTE_NAME]">
         <div>
-          <em>CTE {{ node[NodeProp.CTE_NAME] }} </em>
+          <em>{{ t("app.cte") }} {{ node[NodeProp.CTE_NAME] }} </em>
         </div>
       </template>
       <TimeTooltip

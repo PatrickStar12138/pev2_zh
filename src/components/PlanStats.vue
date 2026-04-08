@@ -12,6 +12,7 @@ import JitDetails from "@/components/JitDetails.vue"
 import BuffersDetail from "@/components/BuffersDetail.vue"
 import IoTooltip from "@/components/tooltip/IoTooltip.vue"
 import { store } from "@/store"
+import { t } from "@/i18n"
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { faCaretDown, faInfoCircle } from "@fortawesome/free-solid-svg-icons"
@@ -112,10 +113,10 @@ const shouldShowSerializationBuffers = computed((): boolean => {
     v-if="store.stats"
   >
     <div class="d-inline-block px-2">
-      Execution time:
+      {{ t("app.executionTime") || "执行时间" }}:
       <template v-if="!store.stats.executionTime">
         <span class="text-body-tertiary">
-          N/A
+          {{ t("app.notAvailable") }}
           <FontAwesomeIcon
             :icon="faInfoCircle"
             class="cursor-help"
@@ -131,10 +132,10 @@ const shouldShowSerializationBuffers = computed((): boolean => {
       </template>
     </div>
     <div class="d-inline-block border-start px-2">
-      Planning time:
+      {{ t("app.planningTime") || "规划时间" }}:
       <template v-if="!store.stats.planningTime">
         <span class="text-body-tertiary">
-          N/A
+          {{ t("app.notAvailable") }}
           <FontAwesomeIcon
             :icon="faInfoCircle"
             class="cursor-help"
@@ -162,7 +163,7 @@ const shouldShowSerializationBuffers = computed((): boolean => {
       class="d-inline-block border-start px-2 position-relative"
       v-if="store.stats.serialization"
     >
-      Serialization:
+      {{ t("app.serialization") }}:
       <span class="stat-value">
         <span
           :class="
@@ -193,19 +194,19 @@ const shouldShowSerializationBuffers = computed((): boolean => {
           class="btn btn-xs btn-close float-end"
           v-on:click="showSerializationDetails = false"
         ></button>
-        <h3>Serialization</h3>
+        <h3>{{ t("app.serialization") }}</h3>
         <div>
-          <b>Time:</b>
+          <b>{{ t("app.time") || "时间" }}:</b>
           <span>{{ duration(store.stats.serialization.Time) }}</span>
         </div>
         <div>
-          <b>Output Volume: </b>
+          <b>{{ t("app.outputVolume") }}: </b>
           <span>
             {{ kilobytes(store.stats.serialization["Output Volume"]) }}</span
           >
         </div>
         <div v-if="shouldShowSerializationBuffers">
-          <b>Buffers: </b>
+          <b>{{ t("app.buffers") }}: </b>
           <BuffersDetail :object="store.stats.serialization" />
         </div>
       </div>
@@ -248,7 +249,7 @@ const shouldShowSerializationBuffers = computed((): boolean => {
       class="d-inline-block border-start px-2 position-relative"
       v-if="store.stats.triggers && store.stats.triggers.length"
     >
-      <span class="stat-label">Triggers: </span>
+      <span class="stat-label">{{ t("app.triggers") }}: </span>
       <span class="stat-value">
         <span
           :class="
@@ -271,11 +272,11 @@ const shouldShowSerializationBuffers = computed((): boolean => {
           class="btn btn-xs btn-close float-end"
           v-on:click="showTriggers = false"
         ></button>
-        <h3>Triggers</h3>
+        <h3>{{ t("app.triggers") }}</h3>
         <div v-for="(trigger, index) in store.stats.triggers" :key="index">
           {{ trigger["Trigger Name"] }}
           <br />
-          <span class="text-body-tertiary">Called</span> {{ trigger["Calls"]
+          <span class="text-body-tertiary">{{ t("app.called") }}</span> {{ trigger["Calls"]
           }}<span class="text-body-tertiary">&times;</span>
           <span class="float-end">
             <span
@@ -289,7 +290,7 @@ const shouldShowSerializationBuffers = computed((): boolean => {
             }}<span class="text-body-tertiary">%</span>
           </span>
           <br />
-          <span class="text-body-tertiary" v-if="trigger.Relation">on</span>
+          <span class="text-body-tertiary" v-if="trigger.Relation">{{ t("app.on") }}</span>
           {{ trigger.Relation }}
           <div class="clearfix"></div>
           <hr
@@ -306,7 +307,7 @@ const shouldShowSerializationBuffers = computed((): boolean => {
       v-if="store.stats.settings"
     >
       <span class="stat-label"
-        >Settings:
+        >{{ t("app.settings") || "设置" }}:
         <span class="badge bg-secondary">{{
           _.keys(store.stats.settings).length
         }}</span></span
@@ -325,10 +326,9 @@ const shouldShowSerializationBuffers = computed((): boolean => {
           class="btn btn-xs btn-close float-end"
           v-on:click="showSettings = false"
         ></button>
-        <h3>PG Settings</h3>
+        <h3>{{ t("app.pgSettings") }}</h3>
         <em class="text-body-tertiary d-block pb-2">
-          Configuration parameters affecting query planning with value different
-          from the built-in default value.
+          {{ t("app.settingsDescription") }}
         </em>
         <table class="table table-sm table-striped mb-0">
           <tbody>
@@ -345,7 +345,7 @@ const shouldShowSerializationBuffers = computed((): boolean => {
       v-if="store.plan?.content.Plan && averageIO(store.plan?.content.Plan)"
     >
       <span class="stat-label">
-        IO: <span v-html="averageIO(store.plan?.content.Plan)"></span>
+        {{ t("app.io") }}: <span v-html="averageIO(store.plan?.content.Plan)"></span>
       </span>
       <FontAwesomeIcon
         :icon="faInfoCircle"

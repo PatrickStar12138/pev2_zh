@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
+import { t } from "@/i18n"
 const localVersion = ref(__APP_VERSION__)
 const remoteVersion = ref()
 const updateRequired = ref(false)
@@ -51,18 +52,18 @@ onMounted(() => {
 
 <template>
   <div class="alert alert-danger d-inline-block" v-if="updateRequired">
-    <p class="fw-bold">A new version of pev2 is available!</p>
+    <p class="fw-bold">{{ t("demo.versionAvailable") }}</p>
     <p>
-      Local version: <b>{{ localVersion }}</b>
+      {{ t("demo.localVersion") }}: <b>{{ localVersion }}</b>
       <br />
-      Latest version: <b>{{ remoteVersion }}</b>
+      {{ t("demo.latestVersion") }}: <b>{{ remoteVersion }}</b>
     </p>
     <p class="mb-0">
-      You can download
+      {{ t("demo.downloadLatest") }}
       <a
         href="https://www.github.com/dalibo/pev2/releases/latest/download/pev2.html"
-        >the latest version</a
-      >.
+        >{{ t("demo.downloadLatestLink") }}</a
+      >。
     </p>
   </div>
 </template>

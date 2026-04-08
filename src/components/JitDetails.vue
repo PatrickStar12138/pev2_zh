@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { JIT } from "@/interfaces"
+import { t } from "@/i18n"
 interface Props {
   jit: JIT
 }
@@ -10,11 +11,11 @@ const props = defineProps<Props>()
   <table class="table table-sm table-borderless">
     <tbody>
       <tr>
-        <th>Functions</th>
+        <th>{{ t("app.functions") }}</th>
         <td class="text-end">{{ props.jit.Functions }}</td>
       </tr>
       <tr>
-        <th colspan="2">Options</th>
+        <th colspan="2">{{ t("app.options") }}</th>
       </tr>
       <tr v-for="(option, index) in props.jit.Options" :key="index">
         <td>&nbsp;&nbsp;{{ index }}</td>
@@ -23,7 +24,7 @@ const props = defineProps<Props>()
         </td>
       </tr>
       <tr>
-        <th colspan="2">Timing</th>
+        <th colspan="2">{{ t("app.timing") }}</th>
       </tr>
       <tr v-for="(timing, index) in props.jit.Timing" :key="index">
         <td>&nbsp;&nbsp;{{ index }}</td>

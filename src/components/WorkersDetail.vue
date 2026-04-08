@@ -11,6 +11,7 @@ import { directive as vTippy } from "vue-tippy"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons"
 import { store } from "@/store"
+import { t, tp } from "@/i18n"
 
 interface Props {
   node: Node
@@ -27,7 +28,7 @@ const { workersLaunchedCount, workersPlannedCount } = useNode(node, viewOptions)
 <template>
   <!-- workers tab -->
   <div>
-    <b>Workers planned: </b>
+    <b>{{ t("app.workersPlanned") }}: </b>
     <span class="px-1">{{ workersPlannedCount }} </span>
     <em
       v-if="
@@ -45,7 +46,7 @@ const { workersLaunchedCount, workersPlannedCount } = useNode(node, viewOptions)
     </em>
   </div>
   <div>
-    <b>Workers launched: </b>
+    <b>{{ t("app.workersLaunched") }}: </b>
     <span class="px-1">{{ workersLaunchedCount }}</span>
     <em
       v-if="
@@ -70,15 +71,15 @@ const { workersLaunchedCount, workersPlannedCount } = useNode(node, viewOptions)
     @wheel.stop
   >
     <template v-for="(worker, index) in node[NodeProp.WORKERS]" :key="index">
-      <div class="card mt-2">
-        <div class="card-header">
-          <b>Worker {{ worker[WorkerProp.WORKER_NUMBER] }}</b>
-        </div>
+        <div class="card mt-2">
+          <div class="card-header">
+          <b>{{ t("app.worker", { id: String(worker[WorkerProp.WORKER_NUMBER] ?? "") }) }}</b>
+          </div>
         <ul class="list-group list-group-flush">
           <template v-for="(value, key) in worker" :key="key">
             <li class="list-group-item d-flex flex-row">
               <div class="col-6">
-                {{ key }}
+                {{ tp(key as string) }}
               </div>
               <div
                 class="col-6"

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { keysToString, kilobytes } from "@/filters"
 import type { SortGroups } from "@/interfaces"
+import { t } from "@/i18n"
 
 interface Props {
   sortGroup: SortGroups
@@ -10,16 +11,17 @@ defineProps<Props>()
 
 <template>
   <div>
-    Count: {{ sortGroup["Group Count"] }}
+    {{ t("app.count") }}: {{ sortGroup["Group Count"] }}
     <br />
     <table class="table-borderless">
       <tbody>
         <tr>
           <td class="text-nowrap p-0">
-            Sort Method<template
-              v-if="sortGroup['Sort Methods Used'].length > 1"
-              >s</template
-            >:
+            {{
+              sortGroup["Sort Methods Used"].length > 1
+                ? t("app.sortMethods")
+                : t("app.sortMethod")
+            }}:
           </td>
           <td class="p-0 ps-1">
             {{ keysToString(sortGroup["Sort Methods Used"]) }}
@@ -30,16 +32,16 @@ defineProps<Props>()
     <table class="table-borderless">
       <tbody>
         <tr>
-          <td class="p-0">Memory:</td>
+          <td class="p-0">{{ t("app.memory") }}:</td>
           <td class="p-0 ps-1">
-            Average:
+            {{ t("app.average") }}:
             {{
               kilobytes(
                 sortGroup["Sort Space Memory"]["Average Sort Space Used"],
               )
             }}
             <br />
-            Peak:
+            {{ t("app.peak") }}:
             {{
               kilobytes(sortGroup["Sort Space Memory"]["Peak Sort Space Used"])
             }}

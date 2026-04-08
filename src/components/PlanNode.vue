@@ -14,6 +14,7 @@ import { HighlightType, NodeProp } from "@/enums"
 import { findNodeBySubplanName } from "@/services/help-service"
 import useNode from "@/node"
 import { store } from "@/store"
+import { t } from "@/i18n"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import {
   faChevronDown,
@@ -177,13 +178,13 @@ function centerCte() {
               "
               :class="{ 'line-clamp-2': !showDetails }"
             >
-              <span class="text-body-tertiary">on</span>
+              <span class="text-body-tertiary">{{ t("app.on") }}</span>
               <span v-if="node[NodeProp.SCHEMA]"
                 >{{ node[NodeProp.SCHEMA] }}.</span
               >{{ node[NodeProp.RELATION_NAME] }}
               {{ node[NodeProp.FUNCTION_NAME] }}
               <span v-if="node[NodeProp.ALIAS]">
-                <span class="text-body-tertiary">as</span>
+                <span class="text-body-tertiary">{{ t("app.as") }}</span>
                 {{ node[NodeProp.ALIAS] }}
               </span>
             </div>
@@ -191,7 +192,7 @@ function centerCte() {
               v-else-if="node[NodeProp.ALIAS]"
               :class="{ 'line-clamp-2': !showDetails }"
             >
-              <span class="text-body-tertiary">on</span>
+              <span class="text-body-tertiary">{{ t("app.on") }}</span>
               <span
                 v-html="keysToString(node[NodeProp.ALIAS] as string)"
               ></span>
@@ -200,7 +201,7 @@ function centerCte() {
               v-if="node[NodeProp.GROUP_KEY]"
               :class="{ 'line-clamp-2': !showDetails }"
             >
-              <span class="text-body-tertiary">by</span>
+              <span class="text-body-tertiary">{{ t("app.by") }}</span>
               <span
                 v-html="keysToString(node[NodeProp.GROUP_KEY] as string)"
               ></span>
@@ -209,7 +210,7 @@ function centerCte() {
               v-if="node[NodeProp.SORT_KEY]"
               :class="{ 'line-clamp-2': !showDetails }"
             >
-              <span class="text-body-tertiary">by</span>
+              <span class="text-body-tertiary">{{ t("app.by") }}</span>
               <span
                 v-html="
                   sortKeys(
@@ -223,7 +224,7 @@ function centerCte() {
               v-if="node[NodeProp.INDEX_NAME]"
               :class="{ 'line-clamp-2': !showDetails }"
             >
-              <span class="text-body-tertiary">using</span>
+              <span class="text-body-tertiary">{{ t("app.using") }}</span>
               <span
                 v-html="keysToString(node[NodeProp.INDEX_NAME] as string)"
               ></span>
@@ -232,7 +233,7 @@ function centerCte() {
               v-if="node[NodeProp.HASH_CONDITION]"
               :class="{ 'line-clamp-2': !showDetails }"
             >
-              <span class="text-body-tertiary">on</span>
+              <span class="text-body-tertiary">{{ t("app.on") }}</span>
               <span
                 v-html="keysToString(node[NodeProp.HASH_CONDITION] as string)"
               ></span>
@@ -243,7 +244,7 @@ function centerCte() {
                   :icon="faSearch"
                   class="text-body-tertiary"
                 ></FontAwesomeIcon>
-                <span class="text-body-tertiary">CTE</span>
+                <span class="text-body-tertiary">{{ t("app.cte") }}</span>
                 {{ node[NodeProp.CTE_NAME] }}
               </a>
             </div>
@@ -278,7 +279,7 @@ function centerCte() {
         </div>
         <PlanNodeDetail :node="node" v-if="showDetails"></PlanNodeDetail>
         <div v-if="isNeverExecuted" class="text-end">
-          <span class="text-body-tertiary bg-body px-1"> Never executed </span>
+          <span class="text-body-tertiary bg-body px-1">{{ t("app.neverExecuted") }}</span>
         </div>
       </div>
     </div>

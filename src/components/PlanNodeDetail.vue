@@ -12,6 +12,7 @@ import MiscDetail from "@/components/MiscDetail.vue"
 import BuffersDetail from "@/components/BuffersDetail.vue"
 import { ViewOptionsKey } from "@/symbols"
 import _ from "lodash"
+import { t, tp } from "@/i18n"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import {
   faAlignJustify,
@@ -123,7 +124,7 @@ watch(activeTab, () => {
       v-if="getNodeTypeDescription(node[NodeProp.NODE_TYPE])"
       class="node-description"
     >
-      <span class="node-type">{{ node[NodeProp.NODE_TYPE] }} Node</span>
+      <span class="node-type">{{ node[NodeProp.NODE_TYPE] }}{{ t("app.nodeDescriptionSuffix") }}</span>
       <span v-html="getNodeTypeDescription(node[NodeProp.NODE_TYPE])"></span>
     </div>
     <ul class="nav nav-tabs card-header-tabs">
@@ -133,7 +134,7 @@ watch(activeTab, () => {
           :class="{ active: activeTab === 'general' }"
           @click.prevent.stop="activeTab = 'general'"
           href=""
-          >General</a
+          >{{ t("app.general") }}</a
         >
       </li>
       <li class="nav-item">
@@ -145,7 +146,7 @@ watch(activeTab, () => {
           }"
           @click.prevent.stop="activeTab = 'iobuffer'"
           href=""
-          >IO & Buffers</a
+          >{{ t("app.ioBuffers") }}</a
         >
       </li>
       <li class="nav-item">
@@ -157,7 +158,7 @@ watch(activeTab, () => {
           }"
           @click.prevent.stop="activeTab = 'output'"
           href=""
-          >Output</a
+          >{{ t("app.output") }}</a
         >
       </li>
       <li class="nav-item">
@@ -172,7 +173,7 @@ watch(activeTab, () => {
           }"
           @click.prevent.stop="activeTab = 'workers'"
           href=""
-          >Workers</a
+          >{{ t("app.workers") }}</a
         >
       </li>
       <li class="nav-item">
@@ -181,7 +182,7 @@ watch(activeTab, () => {
           :class="{ active: activeTab === 'misc' }"
           @click.prevent.stop="activeTab = 'misc'"
           href=""
-          >Misc</a
+          >{{ t("app.misc") }}</a
         >
       </li>
     </ul>
@@ -195,7 +196,7 @@ watch(activeTab, () => {
           :icon="faClock"
           class="text-body-tertiary"
         ></FontAwesomeIcon>
-        <b>Timing:</b>
+        <b>{{ t("app.timing") }}:</b>
         <span
           class="p-0 px-1 rounded alert"
           :class="durationClass"
@@ -215,13 +216,13 @@ watch(activeTab, () => {
           :icon="faAlignJustify"
           class="text-body-tertiary"
         ></FontAwesomeIcon>
-        <b>Rows:</b>
+        <b>{{ t("app.rows") }}:</b>
         <span class="px-1">{{
           tilde + formattedProp("ACTUAL_ROWS_REVISED")
         }}</span>
-        <span class="text-body-tertiary" v-if="node[NodeProp.PLAN_ROWS]"
-          >(Planned: {{ tilde + formattedProp("PLAN_ROWS_REVISED") }})</span
-        >
+          <span class="text-body-tertiary" v-if="node[NodeProp.PLAN_ROWS]"
+            >({{ t("app.planned") }}: {{ tilde + formattedProp("PLAN_ROWS_REVISED") }})</span
+          >
         <span
           v-if="
             plannerRowEstimateDirection !== EstimateDirection.none &&
@@ -230,14 +231,14 @@ watch(activeTab, () => {
         >
           |
           <span v-if="plannerRowEstimateDirection === EstimateDirection.over"
-            ><FontAwesomeIcon :icon="faArrowUp"></FontAwesomeIcon> over</span
+            ><FontAwesomeIcon :icon="faArrowUp"></FontAwesomeIcon> {{ t("app.overEstimated") }}</span
           >
           <span v-if="plannerRowEstimateDirection === EstimateDirection.under"
-            ><FontAwesomeIcon :icon="faArrowDown"></FontAwesomeIcon> under</span
+            ><FontAwesomeIcon :icon="faArrowDown"></FontAwesomeIcon> {{ t("app.underEstimated") }}</span
           >
-          estimated
+          {{ t("app.estimated") }}
           <span v-if="plannerRowEstimateValue != Infinity">
-            by
+            {{ t("app.byAmount") }}
             <span
               class="p-0 px-1 alert"
               :class="estimationClass"
@@ -252,7 +253,7 @@ watch(activeTab, () => {
           :icon="faFilter"
           class="text-body-tertiary"
         ></FontAwesomeIcon>
-        <b> {{ NodeProp[rowsRemovedProp] }}: </b>
+        <b> {{ tp(NodeProp[rowsRemovedProp]) }}: </b>
         <span>
           <span class="px-1">{{ tilde + formattedProp(rowsRemovedProp) }}</span
           >|
@@ -281,7 +282,7 @@ watch(activeTab, () => {
           :icon="faExchangeAlt"
           class="text-body-tertiary"
         ></FontAwesomeIcon>
-        <b>Heap Fetches:</b>
+        <b>{{ t("app.heapFetches") }}:</b>
         <span
           class="p-0 px-1 rounded alert"
           :class="heapFetchesClass"
@@ -294,8 +295,7 @@ watch(activeTab, () => {
           v-if="heapFetchesClass"
           v-tippy="{
             arrow: true,
-            content:
-              'Visibility map may be out-of-date. Consider using VACUUM or change autovacuum settings.',
+            content: t('app.visibilityMapHint'),
           }"
         ></FontAwesomeIcon>
       </div>
@@ -305,12 +305,12 @@ watch(activeTab, () => {
           :icon="faDollarSign"
           class="text-body-tertiary"
         ></FontAwesomeIcon>
-        <b>Cost:</b>
+        <b>{{ t("app.cost") }}:</b>
         <span class="p-0 px-1 me-1 alert" :class="costClass">{{
           formattedProp("EXCLUSIVE_COST")
         }}</span>
         <span class="text-body-tertiary"
-          >(Total: {{ formattedProp("TOTAL_COST") }})</span
+          >({{ t("app.total") }}: {{ formattedProp("TOTAL_COST") }})</span
         >
       </div>
       <div v-if="node[NodeProp.ACTUAL_LOOPS] > 1">
@@ -319,7 +319,7 @@ watch(activeTab, () => {
           :icon="faUndo"
           class="text-body-tertiary"
         ></FontAwesomeIcon>
-        <b>Loops:</b>
+        <b>{{ t("app.loops") }}:</b>
         <span class="px-1">{{ formattedProp("ACTUAL_LOOPS") }} </span>
       </div>
       <!-- general tab -->
@@ -333,13 +333,13 @@ watch(activeTab, () => {
         class="mb-2"
       >
         <b>
-          <span class="more-info" v-tippy="'Write-Ahead Logging'">WAL</span>:
+          <span class="more-info" v-tippy="t('app.writeAheadLogging')">WAL</span>:
         </b>
-        {{ formattedProp("WAL_RECORDS") }} records
+        {{ formattedProp("WAL_RECORDS") }} {{ t("app.records") }}
         <small>({{ formattedProp("WAL_BYTES") }})</small>
         <span v-if="node[NodeProp.WAL_FPI]">
           -
-          <span class="more-info" v-tippy="'WAL Full Page Images'">FPI</span>:
+          <span class="more-info" v-tippy="t('app.walFullPageImages')">FPI</span>:
           {{ formattedProp("WAL_FPI") }}
         </span>
       </div>

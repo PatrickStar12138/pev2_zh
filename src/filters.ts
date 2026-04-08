@@ -4,6 +4,7 @@ import { EstimateDirection, nodePropTypes, PropType } from "@/enums"
 import type { JIT } from "@/interfaces"
 import SortGroup from "@/components/SortGroup.vue"
 import JitDetails from "@/components/JitDetails.vue"
+import { boolLabel, t } from "@/i18n"
 import hljs from "highlight.js/lib/core"
 import pgsql from "highlight.js/lib/languages/pgsql"
 hljs.registerLanguage("pgsql", pgsql)
@@ -54,21 +55,21 @@ export function duration(value: number | undefined): string {
 
 export function cost(value: number | undefined): string {
   if (value === undefined) {
-    return "N/A"
+    return t("app.notAvailable")
   }
   return value.toLocaleString(undefined, { minimumFractionDigits: 2 })
 }
 
 export function rows(value: number | undefined): string {
   if (value === undefined) {
-    return "N/A"
+    return t("app.notAvailable")
   }
   return value.toLocaleString()
 }
 
 export function loops(value: number | undefined): string {
   if (value === undefined) {
-    return "N/A"
+    return t("app.notAvailable")
   }
   return value.toLocaleString()
 }
@@ -95,7 +96,7 @@ export function sortKeys(
     if (presort) {
       result +=
         presort.indexOf(v) !== -1
-          ? '&nbsp;<span class="text-body-tertiary">(presort)</span>'
+          ? `&nbsp;<span class="text-body-tertiary">(${t("app.presort")})</span>`
           : ""
     }
     return result
@@ -192,7 +193,7 @@ export function formatNodeProp(key: string, value: unknown): string {
     if (nodePropTypes[key] === PropType.duration) {
       return duration(value as number)
     } else if (nodePropTypes[key] === PropType.boolean) {
-      return value ? "yes" : "no"
+      return boolLabel(!!value)
     } else if (nodePropTypes[key] === PropType.cost) {
       return cost(value as number)
     } else if (nodePropTypes[key] === PropType.rows) {
@@ -204,9 +205,9 @@ export function formatNodeProp(key: string, value: unknown): string {
     } else if (nodePropTypes[key] === PropType.estimateDirection) {
       switch (value) {
         case EstimateDirection.over:
-          return '<i class="fa fa-arrow-up"></i> over'
+          return `<i class="fa fa-arrow-up"></i> ${t("app.over")}`
         case EstimateDirection.under:
-          return '<i class="fa fa-arrow-down"></i> under'
+          return `<i class="fa fa-arrow-down"></i> ${t("app.under")}`
         default:
           return "-"
       }

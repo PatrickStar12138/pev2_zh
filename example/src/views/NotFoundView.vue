@@ -1,3 +1,5 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { t } from "@/i18n"
+</script>
 
-<template>not found</template>
+<template>{{ t("demo.notFound") }}</template>

@@ -10,6 +10,7 @@ import { HelpService } from "@/services/help-service"
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
 import { blocksAsBytes } from "@/filters"
 import useNode from "@/node"
+import { t } from "@/i18n"
 
 interface Props {
   node: Node
@@ -29,7 +30,9 @@ const node = reactive<Node>(props.node)
 const viewOptions = inject(ViewOptionsKey) as ViewOptions
 const { formattedProp } = useNode(node, viewOptions)
 const scope = props.scope ? `${props.scope}_`.toUpperCase() : ""
-const name = props.scope ? _.capitalize(props.scope) : "Shared/Local"
+const name = props.scope
+  ? t(`app.${props.scope}` as const)
+  : t("app.sharedLocal")
 const readTimeProp = (exclusivePrefix +
   scope +
   "IO_READ_TIME") as keyof typeof NodeProp

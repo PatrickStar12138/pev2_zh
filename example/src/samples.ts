@@ -1,3 +1,5 @@
+import { t } from "@/i18n"
+
 const plan1_source = `Nested Loop Left Join  (cost=11.95..28.52 rows=5 width=157) (actual time=0.010..0.010 rows=0 loops=1)
   Output: rel_users_exams.user_username, rel_users_exams.exam_id, rel_users_exams.started_at, rel_users_exams.finished_at, exam_1.id, exam_1.title, exam_1.date_from, exam_1.date_to, exam_1.created, exam_1.created_by_, exam_1.duration, exam_1.success_threshold, exam_1.published
   Inner Unique: true
@@ -5928,20 +5930,20 @@ interface Sample extends Array<string> {
 }
 
 const samples = <Sample[]>[
-  ["Simple join (TEXT format)", plan1_source, plan1_query],
-  ["Simple join (JSON format)", plan1_source_json, plan1_query],
-  ["Three joins, missing an index", plan2_source, plan2_query],
-  ["Aggregate with four joins", plan5_source, plan5_query],
-  ["With subplan", plan6_source, ""],
-  ["With Buffers", plan7_source, plan7_query],
-  ["A single CTE", plan9_source, plan9_query],
-  ["Many CTEs", plan_many_ctes, ""],
-  ["Very large plan", plan8_source, ""],
-  ["DELETE with triggers", plan_trigger_source, plan_trigger_query],
-  ["With many options", plan_asmany_source, plan_asmany_query],
-  ["Parallel (verbose)", plan_parallel_source, ""],
-  ["Parallel (4 workers)", plan_parallel_2_source, plan_parallel_2_query],
-  ["Partitions", plan_4partitions_source, plan_4partitions_query],
+  [t("demo.sample.simpleJoinText"), plan1_source, plan1_query],
+  [t("demo.sample.simpleJoinJson"), plan1_source_json, plan1_query],
+  [t("demo.sample.threeJoinsMissingIndex"), plan2_source, plan2_query],
+  [t("demo.sample.aggregateWithFourJoins"), plan5_source, plan5_query],
+  [t("demo.sample.withSubplan"), plan6_source, ""],
+  [t("demo.sample.withBuffers"), plan7_source, plan7_query],
+  [t("demo.sample.singleCte"), plan9_source, plan9_query],
+  [t("demo.sample.manyCtes"), plan_many_ctes, ""],
+  [t("demo.sample.veryLargePlan"), plan8_source, ""],
+  [t("demo.sample.deleteWithTriggers"), plan_trigger_source, plan_trigger_query],
+  [t("demo.sample.manyOptions"), plan_asmany_source, plan_asmany_query],
+  [t("demo.sample.parallelVerbose"), plan_parallel_source, ""],
+  [t("demo.sample.parallel4Workers"), plan_parallel_2_source, plan_parallel_2_query],
+  [t("demo.sample.partitions"), plan_4partitions_source, plan_4partitions_query],
 ]
 
 export default samples

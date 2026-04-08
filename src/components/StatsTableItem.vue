@@ -13,6 +13,7 @@ import {
 interface Props {
   value: StatsTableItemType
   executionTime?: number
+  translateName?: boolean
 }
 
 const props = defineProps<Props>()

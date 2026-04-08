@@ -2,6 +2,7 @@ import _ from "lodash"
 import type { IPlan, Node } from "@/interfaces"
 import { NodeProp } from "@/enums"
 import { nodePropTypes, PropType } from "@/enums"
+import { t } from "@/i18n"
 
 export class HelpService {
   public nodeId = 0
@@ -20,35 +21,23 @@ interface INodeDescription {
 }
 
 export const NODE_DESCRIPTIONS: INodeDescription = {
-  LIMIT: "returns a specified number of rows from a record set.",
-  SORT: "sorts a record set based on the specified sort key.",
-  "NESTED LOOP": `merges two record sets by looping through every record in the first set and
-   trying to find a match in the second set. All matching records are returned.`,
-  "MERGE JOIN": `merges two record sets by first sorting them on a <strong>join key</strong>.`,
-  HASH: `generates a hash table from the records in the input recordset. Hash is used by
-   <strong>Hash Join</strong>.`,
-  "HASH JOIN": `joins two record sets by hashing one of them (using a <strong>Hash Scan</strong>).`,
-  AGGREGATE: `groups records together based on a GROUP BY or aggregate function (like <code>sum()</code>).`,
-  HASHAGGREGATE: `groups records together based on a GROUP BY or aggregate function (like sum()). Hash Aggregate uses
-   a hash to first organize the records by a key.`,
-  "SEQ SCAN": `finds relevant records by sequentially scanning the input record set. When reading from a table,
-   Seq Scans (unlike Index Scans) perform a single read operation (only the table is read).`,
-  "INDEX SCAN": `finds relevant records based on an <strong>Index</strong>.
-    Index Scans perform 2 read operations: one to
-    read the index and another to read the actual value from the table.`,
-  "INDEX ONLY SCAN": `finds relevant records based on an <strong>Index</strong>.
-    Index Only Scans perform a single read operation
-    from the index and do not read from the corresponding table.`,
-  "BITMAP HEAP SCAN": `searches through the pages returned by the <strong>Bitmap Index Scan</strong>
-    for relevant rows.`,
-  "BITMAP INDEX SCAN": `uses a <strong>Bitmap Index</strong> (index which uses 1 bit per page)
-    to find all relevant pages.
-    Results of this node are fed to the <strong>Bitmap Heap Scan</strong>.`,
-  "CTE SCAN": `performs a sequential scan of <strong>Common Table Expression (CTE) query</strong> results. Note that
-    results of a CTE are materialized (calculated and temporarily stored).`,
-  MEMOIZE: `is used to cache the results of the inner side of a nested loop. It avoids executing underlying nodes when the results for the current parameters are already in the cache.`,
-  GATHER: `reads the results of the parallel workers, in an undefined order.`,
-  "GATHER MERGE": `reads the results of the parallel workers, preserving any ordering.`,
+  LIMIT: t("help.limit"),
+  SORT: t("help.sort"),
+  "NESTED LOOP": t("help.nestedLoop"),
+  "MERGE JOIN": t("help.mergeJoin"),
+  HASH: t("help.hash"),
+  "HASH JOIN": t("help.hashJoin"),
+  AGGREGATE: t("help.aggregate"),
+  HASHAGGREGATE: t("help.hashAggregate"),
+  "SEQ SCAN": t("help.seqScan"),
+  "INDEX SCAN": t("help.indexScan"),
+  "INDEX ONLY SCAN": t("help.indexOnlyScan"),
+  "BITMAP HEAP SCAN": t("help.bitmapHeapScan"),
+  "BITMAP INDEX SCAN": t("help.bitmapIndexScan"),
+  "CTE SCAN": t("help.cteScan"),
+  MEMOIZE: t("help.memoize"),
+  GATHER: t("help.gather"),
+  "GATHER MERGE": t("help.gatherMerge"),
 }
 
 interface IHelpMessage {
@@ -56,15 +45,13 @@ interface IHelpMessage {
 }
 
 export const HELP_MESSAGES: IHelpMessage = {
-  "MISSING EXECUTION TIME": `Execution time (or Total runtime) not available for this plan. Make sure you
-    use EXPLAIN ANALYZE.`,
-  "MISSING PLANNING TIME": "Planning time not available for this plan.",
-  "WORKERS PLANNED NOT LAUNCHED": `Less workers than planned were launched.
-Consider modifying max_parallel_workers or max_parallel_workers_per_gather.`,
-  "WORKERS DETAILED INFO MISSING": `Consider using EXPLAIN (ANALYZE, VERBOSE)`,
-  "FUZZY NEEDS VERBOSE": `Information may not be accurate. Use EXPLAIN VERBOSE mode.`,
-  "HINT TRACK_IO_TIMING": `HINT: activate <em><b>track_io_timing</b></em> to have details on time spent outside the PG cache.`,
-  "IO TIMINGS PARALLEL": "Distributed among parallel workers",
+  "MISSING EXECUTION TIME": t("help.missingExecutionTime"),
+  "MISSING PLANNING TIME": t("help.missingPlanningTime"),
+  "WORKERS PLANNED NOT LAUNCHED": t("help.workersPlannedNotLaunched"),
+  "WORKERS DETAILED INFO MISSING": t("help.workersDetailedInfoMissing"),
+  "FUZZY NEEDS VERBOSE": t("help.fuzzyNeedsVerbose"),
+  "HINT TRACK_IO_TIMING": t("help.trackIoTiming"),
+  "IO TIMINGS PARALLEL": t("help.ioTimingsParallel"),
 }
 
 interface EaseInOutQuadOptions {

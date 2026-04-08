@@ -2,6 +2,7 @@
 import { blocks } from "@/filters"
 import type { ISerialization, Node } from "@/interfaces"
 import { BuffersProp, NodeProp } from "@/enums"
+import { t } from "@/i18n"
 
 interface Props {
   object: Node | ISerialization
@@ -53,16 +54,16 @@ const tempWrittenBlocks =
   <table class="table table-sm">
     <thead>
       <tr>
-        <th>Blocks</th>
-        <td class="text-end" width="25%">Hit</td>
-        <td class="text-end" width="25%">Read</td>
-        <td class="text-end" width="25%">Dirtied</td>
-        <td class="text-end" width="25%">Written</td>
+        <th>{{ t("app.blocks") }}</th>
+        <td class="text-end" width="25%">{{ t("app.hit") }}</td>
+        <td class="text-end" width="25%">{{ t("app.read") }}</td>
+        <td class="text-end" width="25%">{{ t("app.dirtied") }}</td>
+        <td class="text-end" width="25%">{{ t("app.written") }}</td>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Shared</td>
+        <td>{{ t("app.shared") }}</td>
         <td class="text-end" v-html="blocks(sharedHitBlocks, true) || '-'"></td>
         <td
           class="text-end"
@@ -78,7 +79,7 @@ const tempWrittenBlocks =
         ></td>
       </tr>
       <tr>
-        <td>Temp</td>
+        <td>{{ t("app.temp") }}</td>
         <td class="text-end bg-hatched"></td>
         <td class="text-end" v-html="blocks(tempReadBlocks, true) || '-'"></td>
         <td class="text-end bg-hatched"></td>
@@ -88,7 +89,7 @@ const tempWrittenBlocks =
         ></td>
       </tr>
       <tr>
-        <td>Local</td>
+        <td>{{ t("app.local") }}</td>
         <td class="text-end" v-html="blocks(localHitBlocks, true) || '-'"></td>
         <td class="text-end" v-html="blocks(localReadBlocks, true) || '-'"></td>
         <td

@@ -7,6 +7,7 @@ import SortedTable from "@/components/SortedTable.vue"
 import SortLink from "@/components/SortLink.vue"
 import StatsTableItem from "@/components/StatsTableItem.vue"
 import { store } from "@/store"
+import { t } from "@/i18n"
 
 const executionTime = computed(
   () =>
@@ -108,13 +109,13 @@ const perIndex = computed(() => {
               <thead>
                 <tr>
                   <th scope="col">
-                    <SortLink name="name">Table</SortLink>
+                    <SortLink name="name">{{ t("app.table") }}</SortLink>
                   </th>
                   <th scope="col" class="text-end">
-                    <SortLink name="count">Count</SortLink>
+                    <SortLink name="count">{{ t("app.count") }}</SortLink>
                   </th>
                   <th scope="col" colspan="2" class="text-end">
-                    <SortLink name="time">Time</SortLink>
+                    <SortLink name="time">{{ t("app.time") }}</SortLink>
                   </th>
                 </tr>
               </thead>
@@ -123,13 +124,14 @@ const perIndex = computed(() => {
                   <StatsTableItem
                     :value="value as StatsTableItemType"
                     :executionTime="executionTime"
+                    :translateName="true"
                   ></StatsTableItem>
                 </template>
               </template>
               <tbody v-if="!perTable.length">
                 <tr>
                   <td colspan="3" class="text-center fst-italic">
-                    No tables used
+                    {{ t("app.noTablesUsed") }}
                   </td>
                 </tr>
               </tbody>
@@ -149,13 +151,13 @@ const perIndex = computed(() => {
               <thead>
                 <tr>
                   <th scope="col">
-                    <SortLink name="name">Function</SortLink>
+                    <SortLink name="name">{{ t("app.function") }}</SortLink>
                   </th>
                   <th scope="col" class="text-end">
-                    <SortLink name="count">Count</SortLink>
+                    <SortLink name="count">{{ t("app.count") }}</SortLink>
                   </th>
                   <th scope="col" colspan="2" class="text-end">
-                    <SortLink name="time">Time</SortLink>
+                    <SortLink name="time">{{ t("app.time") }}</SortLink>
                   </th>
                 </tr>
               </thead>
@@ -170,7 +172,7 @@ const perIndex = computed(() => {
               <tbody v-if="!perFunction.length">
                 <tr>
                   <td colspan="3" class="text-center fst-italic">
-                    No function used
+                    {{ t("app.noFunctionUsed") }}
                   </td>
                 </tr>
               </tbody>
@@ -190,13 +192,13 @@ const perIndex = computed(() => {
               <thead>
                 <tr>
                   <th scope="col">
-                    <SortLink name="name">Node Type</SortLink>
+                    <SortLink name="name">{{ t("app.nodeType") }}</SortLink>
                   </th>
                   <th scope="col" class="text-end">
-                    <SortLink name="count">Count</SortLink>
+                    <SortLink name="count">{{ t("app.count") }}</SortLink>
                   </th>
                   <th scope="col" colspan="2" class="text-end">
-                    <SortLink name="time">Time</SortLink>
+                    <SortLink name="time">{{ t("app.time") }}</SortLink>
                   </th>
                 </tr>
               </thead>
@@ -224,13 +226,13 @@ const perIndex = computed(() => {
               <thead>
                 <tr>
                   <th scope="col">
-                    <SortLink name="name">Index</SortLink>
+                    <SortLink name="name">{{ t("app.index") }}</SortLink>
                   </th>
                   <th scope="col" class="text-end">
-                    <SortLink name="count">Count</SortLink>
+                    <SortLink name="count">{{ t("app.count") }}</SortLink>
                   </th>
                   <th scope="col" colspan="2" class="text-end">
-                    <SortLink name="time">Time</SortLink>
+                    <SortLink name="time">{{ t("app.time") }}</SortLink>
                   </th>
                 </tr>
               </thead>
@@ -245,7 +247,7 @@ const perIndex = computed(() => {
               <tbody v-if="!perIndex.length">
                 <tr>
                   <td colspan="3" class="text-center fst-italic">
-                    No index used
+                    {{ t("app.noIndexUsed") }}
                   </td>
                 </tr>
               </tbody>

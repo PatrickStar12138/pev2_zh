@@ -7,6 +7,7 @@ import { NodeProp } from "../enums"
 import LevelDivider from "@/components/LevelDivider.vue"
 import { store } from "@/store"
 import type { FlattenedPlanNode } from "@/store"
+import { t } from "@/i18n"
 
 onMounted((): void => {
   localStorage.setItem("gridIsNotNew", "true")
@@ -298,52 +299,52 @@ const columns = computed(() => {
           <th colspan="2">
             <!-- id & time -->
           </th>
-          <th class="text-center" :colspan="ioColumns" v-if="hasIO">io</th>
+          <th class="text-center" :colspan="ioColumns" v-if="hasIO">{{ t("app.io") }}</th>
           <th :colspan="columnsLeft.length - ioColumns"></th>
           <th
             class="text-center"
             :colspan="sharedBlocksColumns"
             v-if="sharedBlocksColumns > 0"
           >
-            shared
+            {{ t("app.shared") }}
           </th>
           <th
             class="text-center"
             :colspan="tempBlocksColumns"
             v-if="tempBlocksColumns > 0"
           >
-            temp
+            {{ t("app.temp") }}
           </th>
           <th
             class="text-center"
             :colspan="localBlocksColumns"
             v-if="localBlocksColumns > 0"
           >
-            local
+            {{ t("app.local") }}
           </th>
         </tr>
         <tr>
           <th class="text-center"></th>
-          <th class="text-center" v-if="hasTime">time</th>
-          <th class="text-center" v-if="hasIORead">read</th>
-          <th class="text-center" v-if="hasIOWrite">write</th>
-          <th class="text-center" v-if="hasRows">rows</th>
-          <th class="text-center" v-if="hasEstimation">estim</th>
-          <th class="text-center" v-if="hasCost">cost</th>
-          <th class="text-center" v-if="hasLoops">loops</th>
-          <th class="text-center" v-if="hasFilter">filter</th>
-          <th class="text-center" v-if="hasHeapFetches">heap</th>
+          <th class="text-center" v-if="hasTime">{{ t("app.time") }}</th>
+          <th class="text-center" v-if="hasIORead">{{ t("app.read") }}</th>
+          <th class="text-center" v-if="hasIOWrite">{{ t("app.write") }}</th>
+          <th class="text-center" v-if="hasRows">{{ t("app.rows") }}</th>
+          <th class="text-center" v-if="hasEstimation">估算</th>
+          <th class="text-center" v-if="hasCost">{{ t("app.cost") }}</th>
+          <th class="text-center" v-if="hasLoops">{{ t("app.loops") }}</th>
+          <th class="text-center" v-if="hasFilter">{{ t("app.filter") }}</th>
+          <th class="text-center" v-if="hasHeapFetches">{{ t("app.heap") }}</th>
           <th style="width: 100%"></th>
-          <th class="text-center" v-if="hasSharedHit">hit</th>
-          <th class="text-center" v-if="hasSharedRead">read</th>
-          <th class="text-center" v-if="hasSharedDirtied">dirt</th>
-          <th class="text-center" v-if="hasSharedWritten">writ</th>
-          <th class="text-center" v-if="hasTempRead">read</th>
-          <th class="text-center" v-if="hasTempWritten">writ</th>
-          <th class="text-center" v-if="hasLocalHit">hit</th>
-          <th class="text-center" v-if="hasLocalRead">read</th>
-          <th class="text-center" v-if="hasLocalDirtied">dirt</th>
-          <th class="text-center" v-if="hasLocalWritten">writ</th>
+          <th class="text-center" v-if="hasSharedHit">{{ t("app.hit") }}</th>
+          <th class="text-center" v-if="hasSharedRead">{{ t("app.read") }}</th>
+          <th class="text-center" v-if="hasSharedDirtied">{{ t("app.dirtied") }}</th>
+          <th class="text-center" v-if="hasSharedWritten">{{ t("app.written") }}</th>
+          <th class="text-center" v-if="hasTempRead">{{ t("app.read") }}</th>
+          <th class="text-center" v-if="hasTempWritten">{{ t("app.written") }}</th>
+          <th class="text-center" v-if="hasLocalHit">{{ t("app.hit") }}</th>
+          <th class="text-center" v-if="hasLocalRead">{{ t("app.read") }}</th>
+          <th class="text-center" v-if="hasLocalDirtied">{{ t("app.dirtied") }}</th>
+          <th class="text-center" v-if="hasLocalWritten">{{ t("app.written") }}</th>
         </tr>
       </thead>
       <tbody v-for="(flat, index) in store.flat" :key="index">

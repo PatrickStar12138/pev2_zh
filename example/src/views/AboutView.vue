@@ -1,55 +1,52 @@
 <script lang="ts" setup>
 import MainLayout from "../layouts/MainLayout.vue"
+import { t } from "@/i18n"
 </script>
 
 <template>
   <MainLayout>
     <div class="container">
-      <h2>Disclaimer</h2>
+      <h2>{{ t("demo.disclaimer") }}</h2>
       <p>
-        This project is a rewrite of the excellent
+        {{ t("demo.disclaimerBody1") }}
         <a href="https://github.com/AlexTatiyants/pev"
           >Postgres Explain Visualizer (pev)</a
-        >. Kudos go to Alex Tatiyants.
+        >。
       </p>
 
       <p>
-        The pev project was initialy written in early 2016 but seem to be
-        abandonned since then. There was no activity at all for more than
+        {{ t("demo.disclaimerBody2") }}
         <a href="https://github.com/AlexTatiyants/pev/issues/42"
-          >3 years and counting</a
+          >3 年以上</a
         >
-        though there are
+        ，不过仍然有
         <a href="https://github.com/AlexTatiyants/pev/issues"
-          >several issues open</a
+          >多个未关闭的 issue</a
         >
-        and relevant pull requests pending.
+        和待处理的相关 pull request。
       </p>
 
-      <h2>Usage tips</h2>
+      <h2>{{ t("demo.usageTips") }}</h2>
       <p>
-        To get the most out of it, we recommend generating a query plan using
-        the following line:
+        {{ t("demo.usageBody1") }}
         <code>EXPLAIN (ANALYZE, COSTS, VERBOSE, BUFFERS, FORMAT JSON)</code>. It
-        is recommend submitting a (decently formatted) SQL query that generated
-        the plan.
+        {{ t("demo.usageBody2") }}
       </p>
       <p>
-        PEV2 can also parse text although the JSON format usually has better
-        support.
+        {{ t("demo.usageBody3") }}
       </p>
 
-      <h2>Help improve PEV2</h2>
-      <p>You can help us.</p>
+      <h2>{{ t("demo.helpImprove") }}</h2>
+      <p>{{ t("demo.helpUs") }}</p>
 
       <p>
-        Report issues or contribute to the code on
-        <a href="https://github.com/dalibo/pev2">Github</a>.
+        {{ t("demo.helpUsBody") }}
+        <a href="https://github.com/dalibo/pev2">GitHub</a>。
       </p>
 
       <hr />
       <div class="text-center text-body-tertiary">
-        <b>pev2</b> is brought to you by
+        <b>pev2</b> {{ t("demo.broughtBy") }}
         <a href="https://dalibo.com">Dalibo</a>
       </div>
     </div>

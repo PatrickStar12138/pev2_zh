@@ -32,6 +32,7 @@ import { HighlightType, NodeProp } from "@/enums"
 import { json_, pgsql_ } from "@/filters"
 import { setDefaultProps } from "vue-tippy"
 import { store } from "@/store.ts"
+import { t } from "@/i18n"
 
 setDefaultProps({
   theme: "bootstrap",
@@ -407,9 +408,9 @@ function updateNodeSize(node: Node, size: [number, number]) {
   <div v-if="!store.plan" class="flex-grow-1 d-flex justify-content-center">
     <div class="card align-self-center border-danger w-50">
       <div class="card-body">
-        <h5 class="card-title text-danger">Couldn't parse plan</h5>
+        <h5 class="card-title text-danger">{{ t("app.parseErrorTitle") }}</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">
-          An error occured while parsing the plan
+          {{ t("app.parseErrorSubtitle") }}
         </h6>
         <div class="overflow-hidden d-flex w-100 h-100 position-relative mb-3">
           <div class="overflow-auto flex-grow-1">
@@ -421,19 +422,18 @@ function updateNodeSize(node: Node, size: [number, number]) {
           <Copy :content="planSource" />
         </div>
         <p class="card-text text-body-dark">
-          The plan you submited couldn't be parsed. This may be a bug. You can
-          help us fix it by opening a new issue.
+          {{ t("app.parseErrorBody") }}
         </p>
         <div class="d-flex align-items-center">
           <span class="text-body-tertiary">
             <LogoImage />
-            PEV2 <i>version {{ version }}</i>
+            PEV2 <i>{{ t("app.version") }} {{ version }}</i>
           </span>
           <a
             href="https://github.com/dalibo/pev2/issues/new?template=parsing_error.md&labels=parsing&title=Failed+to+parse+plan"
             target="_blank"
             class="btn btn-primary ms-auto"
-            >Open an issue on Github</a
+            >{{ t("app.openGithubIssue") }}</a
           >
         </div>
       </div>
@@ -451,7 +451,7 @@ function updateNodeSize(node: Node, size: [number, number]) {
             class="nav-link px-2 py-0"
             :class="{ active: activeTab === 'plan' }"
             href="#plan"
-            >Plan</a
+            >{{ t("app.plan") }}</a
           >
         </li>
         <li class="nav-item p-1">
@@ -459,13 +459,13 @@ function updateNodeSize(node: Node, size: [number, number]) {
             class="nav-link px-2 py-0 position-relative"
             :class="{ active: activeTab === 'grid' }"
             href="#grid"
-            >Grid
+            >{{ t("app.grid") }}
             <span
               class="badge bg-info"
               style="font-size: 0.6em"
               v-if="!gridIsNotNew"
             >
-              new
+              {{ t("app.newBadge") }}
             </span>
           </a>
         </li>
@@ -474,7 +474,7 @@ function updateNodeSize(node: Node, size: [number, number]) {
             class="nav-link px-2 py-0"
             :class="{ active: activeTab === 'raw' }"
             href="#raw"
-            >Raw</a
+            >{{ t("app.raw") }}</a
           >
         </li>
         <li class="nav-item p-1">
@@ -482,7 +482,7 @@ function updateNodeSize(node: Node, size: [number, number]) {
             class="nav-link px-2 py-0"
             :class="{ active: activeTab === 'query', disabled: !store.query }"
             href="#query"
-            >Query</a
+            >{{ t("app.query") }}</a
           >
         </li>
         <li class="nav-item p-1">
@@ -490,7 +490,7 @@ function updateNodeSize(node: Node, size: [number, number]) {
             class="nav-link px-2 py-0"
             :class="{ active: activeTab === 'stats' }"
             href="#stats"
-            >Stats</a
+            >{{ t("app.stats") }}</a
           >
         </li>
       </ul>
@@ -544,7 +544,7 @@ function updateNodeSize(node: Node, size: [number, number]) {
                           viewOptions.highlightType = HighlightType.NONE
                         "
                       >
-                        none
+                        {{ t("app.none") }}
                       </button>
                       <button
                         class="btn btn-outline-secondary"
@@ -558,7 +558,7 @@ function updateNodeSize(node: Node, size: [number, number]) {
                         "
                         :disabled="!store.plan?.isAnalyze"
                       >
-                        duration
+                        {{ t("app.duration") }}
                       </button>
                       <button
                         class="btn btn-outline-secondary"
@@ -574,7 +574,7 @@ function updateNodeSize(node: Node, size: [number, number]) {
                           rootNode[NodeProp.ACTUAL_ROWS] === undefined
                         "
                       >
-                        rows
+                        {{ t("app.rows") }}
                       </button>
                       <button
                         class="btn btn-outline-secondary"
@@ -586,7 +586,7 @@ function updateNodeSize(node: Node, size: [number, number]) {
                           viewOptions.highlightType = HighlightType.COST
                         "
                       >
-                        cost
+                        {{ t("app.cost") }}
                       </button>
                     </div>
                   </div>

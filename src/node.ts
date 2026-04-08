@@ -11,6 +11,7 @@ import {
 import { blocks, cost, duration, factor, formatNodeProp, rows } from "@/filters"
 import { numberToColorHsl } from "@/services/color-service"
 import { store } from "@/store"
+import { t, tp } from "@/i18n"
 
 export default function useNode(
   node: Node,
@@ -385,29 +386,31 @@ export default function useNode(
     }
     switch (estimateDirection) {
       case EstimateDirection.over:
-        text += "Over"
+        text += t("app.overEstimated")
         break
       case EstimateDirection.under:
-        text += "Under"
+        text += t("app.underEstimated")
         break
       default:
-        text += "Correctly"
+        text += "正确"
     }
-    text += " estimated"
+    text += " " + t("app.estimated")
     text +=
-      estimateFactor !== 1 ? " by <b>" + factor(estimateFactor) + "</b>" : ""
+      estimateFactor !== 1
+        ? " " + t("app.byAmount") + " <b>" + factor(estimateFactor) + "</b>"
+        : ""
     text += "<br>"
-    text += `Rows: ${rows(node[NodeProp.ACTUAL_ROWS_REVISED])} `
-    text += `(${rows(node[NodeProp.PLAN_ROWS_REVISED] as number)} planned)`
+    text += `${t("app.rows")}: ${rows(node[NodeProp.ACTUAL_ROWS_REVISED])} `
+    text += `(${rows(node[NodeProp.PLAN_ROWS_REVISED] as number)} ${t("app.planned")})`
     return text
   })
 
   const costTooltip = computed((): string => {
-    return ["Cost: ", rows(node[NodeProp.EXCLUSIVE_COST] as number)].join("")
+    return [t("app.cost"), ": ", rows(node[NodeProp.EXCLUSIVE_COST] as number)].join("")
   })
 
   const rowsRemovedTooltip = computed((): string => {
-    return `${NodeProp[rowsRemovedProp]}: ${tilde.value}${rows(rowsRemoved.value)}`
+    return `${tp(NodeProp[rowsRemovedProp])}: ${tilde.value}${rows(rowsRemoved.value)}`
   })
 
   const rowsIsFractional = computed((): boolean => {
@@ -450,40 +453,40 @@ export default function useNode(
         }
         text += '<table class="table table-sm table-borderless mb-0">'
         text += hit
-          ? '<tr><td>Hit:</td><td class="text-end">' +
+          ? `<tr><td>${t("app.hit")}:</td><td class="text-end">` +
             blocks(hit, true) +
             "</td></tr>"
           : ""
         text += read
-          ? '<tr><td>Read:</td><td class="text-end">' +
+          ? `<tr><td>${t("app.read")}:</td><td class="text-end">` +
             blocks(read, true) +
             "</td></tr>"
           : ""
         text += dirtied
-          ? '<tr><td>Dirtied:</td><td class="text-end">' +
+          ? `<tr><td>${t("app.dirtied")}:</td><td class="text-end">` +
             blocks(dirtied, true) +
             "</td></tr>"
           : ""
         text += written
-          ? '<tr><td>Written:</td><td class="text-end">' +
+          ? `<tr><td>${t("app.written")}:</td><td class="text-end">` +
             blocks(written, true) +
             "</td></tr>"
           : ""
         text += "</table>"
 
         if (!hit && !read && !dirtied && !written) {
-          text = " N/A"
+          text = " " + t("app.notAvailable")
         }
 
         switch (location) {
           case BufferLocation.shared:
-            text = "Shared Blocks:" + text
+            text = `${t("app.shared")}${t("app.blocks")}:` + text
             break
           case BufferLocation.temp:
-            text = "Temp Blocks:" + text
+            text = `${t("app.temp")}${t("app.blocks")}:` + text
             break
           case BufferLocation.local:
-            text = "Local Blocks:" + text
+            text = `${t("app.local")}${t("app.blocks")}:` + text
             break
         }
         return text
@@ -500,7 +503,7 @@ export default function useNode(
   })
 
   const heapFetchesTooltip = computed((): string => {
-    return `Heap Fetches: ${node[NodeProp.HEAP_FETCHES]?.toLocaleString()}`
+    return `${t("app.heapFetches")}: ${node[NodeProp.HEAP_FETCHES]?.toLocaleString()}`
   })
 
   // returns the formatted prop

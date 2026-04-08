@@ -12,6 +12,7 @@ import {
 import useNode from "@/node"
 import type { Node, ViewOptions } from "@/interfaces"
 import { ViewOptionsKey } from "@/symbols"
+import { t } from "@/i18n"
 interface Props {
   node: Node
 }
@@ -33,13 +34,13 @@ const {
   <span
     v-if="durationClass"
     :class="'p-0  d-inline-block mb-0 ms-1 text-nowrap alert ' + durationClass"
-    v-tippy="'Slow'"
+    v-tippy="t('app.slow')"
     ><FontAwesomeIcon fixed-width :icon="faClock"></FontAwesomeIcon>
   </span>
   <span
     v-if="costClass"
     :class="'p-0  d-inline-block mb-0 ms-1 text-nowrap alert ' + costClass"
-    v-tippy="'Cost is high'"
+    v-tippy="t('app.highCost')"
     ><FontAwesomeIcon fixed-width :icon="faDollarSign"></FontAwesomeIcon
   ></span>
   <span
@@ -47,7 +48,7 @@ const {
     :class="
       'p-0  d-inline-block mb-0 ms-1 text-nowrap alert ' + estimationClass
     "
-    v-tippy="'Bad estimation for number of rows'"
+    v-tippy="t('app.badRowEstimate')"
     ><FontAwesomeIcon fixed-width :icon="faThumbsDown"></FontAwesomeIcon
   ></span>
   <span
@@ -66,7 +67,7 @@ const {
     "
     v-tippy="{
       arrow: true,
-      content: 'Heap Fetches number is high',
+      content: t('app.heapFetchesHigh'),
     }"
   >
     <FontAwesomeIcon fixed-width :icon="faExchangeAlt"></FontAwesomeIcon>
